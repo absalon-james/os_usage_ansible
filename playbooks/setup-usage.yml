@@ -1,5 +1,5 @@
 - include: os-glance-usage.yml
-# - include: os-cinder-usage.yml
-# - include: os-nova-usage.yml
+- include: os-cinder-usage.yml
+- include: os-nova-usage.yml
 # - include: os-neutron-usage.yml
 # - include: os-swift-usage.yml
