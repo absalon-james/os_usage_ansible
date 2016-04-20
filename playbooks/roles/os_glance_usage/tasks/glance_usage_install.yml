@@ -2,6 +2,9 @@
   file:
     path: /etc/os_usage
     state: directory
+  tags:
+    - glance-usage-install
+    - glance-usage-install-config
 
 - name: Drop /etc/os_usage/glance.yml
   template:
@@ -12,6 +15,9 @@
     group: "root"
   notify:
     - Restart glance api
+  tags:
+    - glance-usage-install
+    - glance-usage-install-config
 
 - name: Install glance usage pip packages (venv)
   pip:
@@ -57,6 +63,9 @@
   register: sitecustomize_venv_stat
   when:
     - glance_venv_enabled | bool
+  tags:
+    - glance-usage-install
+    - glance-usage-install-config
 
 - name: Stat sitecustomize.py (no venv)
   stat:
@@ -64,6 +73,9 @@
   register: sitecustomize_stat
   when:
     - not glance_venv_enabled | bool
+  tags:
+    - glance-usage-install
+    - glance-usage-install-config
 
 - name: Drop sitecustomize.py (venv)
   template:
@@ -77,6 +89,9 @@
     - not sitecustomize_venv_stat.stat.exists
   notify:
     - Restart glance api
+  tags:
+    - glance-usage-install
+    - glance-usage-install-config
 
 - name: Drop sitecustomize.py (no venv)
   template:
@@ -90,3 +105,6 @@
     - not sitecustomize_stat.stat.exists
   notify:
     - Restart glance api
+  tags:
+    - glance-usage-install
+    - glance-usage-install-config
