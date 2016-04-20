@@ -1,0 +1,6 @@
+- name: Install nova usage
+  hosts: nova_api_os_compute
+  user: root
+  roles:
+   - role: "os_nova_usage"
+     nova_venv_tag: "{{ openstack_release }}"

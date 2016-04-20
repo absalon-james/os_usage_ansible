@@ -1,0 +1,13 @@
+cinder_venv_enabled: true
+cinder_venv_tag: untagged
+cinder_venv_dir: "/openstack/venvs/cinder-{{ cinder_venv_tag }}"
+
+cinder_usage_version: b84acd60f03e03d5c60a4a198cd5b45c9bf219ca
+cinder_usage_location: "git+https://github.com/absalon-james/os_usage.git@{{ cinder_usage_version }}#egg=os_usage"
+
+cinder_mtd_version: c08fb0c21e03376ddd28c9ce63b24f1c1122ceca
+cinder_mtd_location: "git+https://github.com/absalon-james/magic_the_decorating.git@{{ cinder_mtd_version }}#egg=magic_the_decorating"
+
+cinder_usage_pip_packages:
+  - "{{ cinder_mtd_location }}"
+  - "{{ cinder_usage_location }}"

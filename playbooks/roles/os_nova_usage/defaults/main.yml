@@ -1,0 +1,9 @@
+nova_venv_enabled: true
+nova_venv_tag: untagged
+nova_venv_dir: "/openstack/venvs/nova-{{ nova_venv_tag }}"
+
+nova_usage_version: b84acd60f03e03d5c60a4a198cd5b45c9bf219ca
+nova_usage_location: "git+https://github.com/absalon-james/os_usage.git@{{ nova_usage_version }}#egg=os_usage"
+
+nova_usage_pip_packages:
+  - "{{ nova_usage_location }}"

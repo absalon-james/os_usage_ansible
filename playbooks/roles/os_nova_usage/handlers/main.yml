@@ -1,0 +1,5 @@
+- name: Restart nova api
+  service:
+    name: "nova-api-os-compute"
+    state: "restarted"
+    pattern: "nova-api-os-compute"

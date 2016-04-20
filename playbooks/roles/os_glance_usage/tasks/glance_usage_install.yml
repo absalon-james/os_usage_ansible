@@ -1,0 +1,92 @@
+- name: Create /etc/os_usage
+  file:
+    path: /etc/os_usage
+    state: directory
+
+- name: Drop /etc/os_usage/glance.yml
+  template:
+    src: glance.yml.j2
+    dest: /etc/os_usage/glance.yml
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  notify:
+    - Restart glance api
+
+- name: Install glance usage pip packages (venv)
+  pip:
+    name: "{{ item }}"
+    state: present
+    virtualenv: "{{ glance_venv_dir }}"
+    virtualenv_site_packages: "no"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items:
+    - "{{ glance_usage_pip_packages }}"
+  when:
+    - glance_venv_enabled | bool
+  notify:
+    - Restart glance api
+  tags:
+    - glance-usage-install
+    - glance-usage-install-pip-packages
+
+- name: Install glance usage pip packages (no venv)
+  pip:
+    name: "{{ item }}"
+    state: present
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items:
+    - "{{ glance_usage_pip_packages }}"
+  when:
+    - not glance_venv_enabled | bool
+  notify:
+    - Restart glance api
+  tags:
+    - glance-usage-install
+    - glance-usage-install-pip-packages
+
+- name: Stat sitecutomize.py (venv)
+  stat:
+    path: "{{ glance_venv_dir }}/lib/python2.7/sitecustomize.py"
+  register: sitecustomize_venv_stat
+  when:
+    - glance_venv_enabled | bool
+
+- name: Stat sitecustomize.py (no venv)
+  stat:
+    path: /etc/python2.7/sitecustomize.py
+  register: sitecustomize_stat
+  when:
+    - not glance_venv_enabled | bool
+
+- name: Drop sitecustomize.py (venv)
+  template:
+    src: sitecustomize.py.j2
+    dest: "{{ glance_venv_dir }}/lib/python2.7/sitecustomize.py"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  when:
+    - glance_venv_enabled | bool
+    - not sitecustomize_venv_stat.stat.exists
+  notify:
+    - Restart glance api
+
+- name: Drop sitecustomize.py (no venv)
+  template:
+    src: sitecustomize.py.j2
+    dest: /etc/python2.7/sitecustomize.py
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  when:
+    - not glance_venv_enabled | bool
+    - not sitecustomize_stat.stat.exists
+  notify:
+    - Restart glance api

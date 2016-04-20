@@ -1,0 +1,13 @@
+glance_venv_enabled: true
+glance_venv_tag: untagged
+glance_venv_dir: "/openstack/venvs/glance-{{ glance_venv_tag }}"
+
+glance_usage_version: b84acd60f03e03d5c60a4a198cd5b45c9bf219ca
+glance_usage_location: "git+https://github.com/absalon-james/os_usage.git@{{ glance_usage_version }}#egg=os_usage"
+
+glance_mtd_version: c08fb0c21e03376ddd28c9ce63b24f1c1122ceca
+glance_mtd_location: "git+https://github.com/absalon-james/magic_the_decorating.git@{{ glance_mtd_version }}#egg=magic_the_decorating"
+
+glance_usage_pip_packages:
+  - "{{ glance_mtd_location }}"
+  - "{{ glance_usage_location }}"

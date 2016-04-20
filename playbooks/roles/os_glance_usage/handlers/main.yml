@@ -1,0 +1,5 @@
+- name: Restart glance api
+  service:
+    name: "glance-api"
+    state: "restarted"
+    pattern: "glance-api"

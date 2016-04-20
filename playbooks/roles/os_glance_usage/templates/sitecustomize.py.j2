@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+# install the apport exception handler if available
+try:
+    import apport_python_hook
+except ImportError:
+    pass
+else:
+    apport_python_hook.install()
+
+import sys
+from magic_the_decorating.importer import Finder
+sys.meta_path.append(Finder('/etc/os_usage/glance.yml'))

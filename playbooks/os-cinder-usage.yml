@@ -1,0 +1,6 @@
+- name: Install cinder usage
+  hosts: cinder_api
+  user: root
+  roles:
+   - role: "os_cinder_usage"
+     cinder_venv_tag: "{{ openstack_release }}"
